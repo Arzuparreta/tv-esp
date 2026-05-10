@@ -1,0 +1,25 @@
+[Unit]
+Description=TV España — Vite frontend (port 5173)
+Documentation=file://INSTALL_DIR/README.md
+After=network-online.target tv-esp-proxy.service
+Requires=tv-esp-proxy.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=SVC_USER
+Group=SVC_GROUP
+WorkingDirectory=INSTALL_DIR
+Environment=NODE_ENV=development
+ExecStart=/usr/bin/node node_modules/vite/bin/vite.js --host 0.0.0.0
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=tv-esp-web
+
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

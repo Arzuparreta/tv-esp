@@ -91,6 +91,41 @@ Esto levanta:
 
 Abre `http://<ip-del-servidor>:5173` desde cualquier dispositivo en tu red.
 
+### Servicio systemd (recomendado en el servidor)
+
+Para que **proxy y frontend arranquen al boot** y se **reinicien solos** si fallan (sin `npm start` a mano):
+
+```bash
+cd /ruta/al/repo/tv-esp
+npm install
+sudo ./deploy/install-systemd.sh
+```
+
+El script instala dos unidades en `/etc/systemd/system/`:
+
+| Unidad | Puerto | Rol |
+|--------|--------|-----|
+| `tv-esp-proxy.service` | **3555** | Proxy HLS / Atresplayer |
+| `tv-esp-web.service` | **5173** | Vite (interfaz) |
+
+Ambas usan `Restart=always` y `RestartSec=5`. El frontend **depende** del proxy (`Requires=`).
+
+**Comandos útiles:**
+
+```bash
+sudo systemctl status tv-esp-proxy tv-esp-web
+sudo systemctl restart tv-esp-proxy tv-esp-web
+journalctl -u tv-esp-proxy -u tv-esp-web -f
+```
+
+Si el código vive bajo otro usuario, antes de instalar:
+
+```bash
+sudo TV_ESP_USER=tu_usuario ./deploy/install-systemd.sh
+```
+
+Tras mover el repo o cambiar de máquina, vuelve a ejecutar `install-systemd.sh` para regenerar las rutas en los `.service`.
+
 ### Arrancar por separado
 
 ```bash
@@ -131,6 +166,10 @@ Los tests cubren:
 
 ```
 tv-esp/
+├── deploy/
+│   ├── tv-esp-proxy.service   # plantilla systemd (proxy)
+│   ├── tv-esp-web.service     # plantilla systemd (Vite)
+│   └── install-systemd.sh     # instala y habilita ambas unidades
 ├── server/
 │   └── proxy.mjs          # Express proxy (CORS + Atresplayer API)
 ├── src/
