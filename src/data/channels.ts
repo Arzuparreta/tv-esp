@@ -10,7 +10,6 @@ export const channels: Channel[] = [
     epgId: 'La1.TV',
     web: 'https://www.rtve.es/play/videos/directo/la-1/',
     sources: [
-      { type: 'hls', url: 'https://ztnr.rtve.es/ztnr/1688877.m3u8' },
       { type: 'hls', url: 'https://rtvelivestream.rtve.es/rtvesec/la1/la1_main_dvr.m3u8' },
       { type: 'hls', url: 'https://dghxc56urunop.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-zabn6k211oedh/La1ES.m3u8' },
       { type: 'iframe', url: 'https://www.rtve.es/play/videos/directo/la-1/' },
@@ -24,7 +23,6 @@ export const channels: Channel[] = [
     epgId: 'La2.TV',
     web: 'https://www.rtve.es/play/videos/directo/la-2/',
     sources: [
-      { type: 'hls', url: 'https://ztnr.rtve.es/ztnr/1688885.m3u8' },
       { type: 'hls', url: 'https://rtvelivestream.rtve.es/rtvesec/la2/la2_main_dvr.m3u8' },
       { type: 'hls', url: 'https://d1yebix5w29z3v.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-haqfba85d1gvv/La2ES.m3u8' },
       { type: 'iframe', url: 'https://www.rtve.es/play/videos/directo/la-2/' },
@@ -62,9 +60,6 @@ export const channels: Channel[] = [
     epgId: 'Cuatro.TV',
     web: 'https://www.mitele.es/directo/cuatro',
     sources: [
-      { type: 'hls', url: 'https://livehlsdai-i.akamaihd.net/hls/live/571643/cuatro/bitrate_4.m3u8' },
-      { type: 'hls', url: 'https://livehlsdai-i.akamaihd.net/hls/live/571643/cuatro/bitrate_3.m3u8' },
-      { type: 'hls', url: 'https://livehlsdai-i.akamaihd.net/hls/live/571643/cuatro/master.m3u8' },
       { type: 'web', url: 'https://www.mitele.es/directo/cuatro' },
     ],
   },
@@ -76,9 +71,6 @@ export const channels: Channel[] = [
     epgId: 'Telecinco.TV',
     web: 'https://www.mitele.es/directo/telecinco',
     sources: [
-      { type: 'hls', url: 'https://livehlsdai-i.akamaihd.net/hls/live/571640/telecinco/bitrate_4.m3u8' },
-      { type: 'hls', url: 'https://livehlsdai-i.akamaihd.net/hls/live/571640/telecinco/bitrate_3.m3u8' },
-      { type: 'hls', url: 'https://livehlsdai-i.akamaihd.net/hls/live/571640/telecinco/master.m3u8' },
       { type: 'web', url: 'https://www.mitele.es/directo/telecinco' },
     ],
   },
