@@ -31,7 +31,7 @@ describe('Channel registry', () => {
   })
 
   it('every source has a valid type and non-empty url', () => {
-    const validTypes: SourceType[] = ['hls', 'iframe', 'youtube', 'web', 'atres']
+    const validTypes: SourceType[] = ['hls', 'video', 'iframe', 'youtube', 'web', 'atres']
     for (const ch of channels) {
       for (const src of ch.sources) {
         expect(validTypes, `${ch.id} source type "${src.type}" invalid`).toContain(src.type)

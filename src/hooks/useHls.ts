@@ -1,15 +1,18 @@
-import { useEffect, useRef, useCallback, useState } from 'react'
+import { useEffect, useEffectEvent, useRef, useCallback, useState } from 'react'
 import Hls from 'hls.js'
+import { watchPlayback } from '../lib/playbackWatchdog'
 
 interface UseHlsOptions {
   url: string
   autoplay?: boolean
+  direct?: boolean
   onError?: () => void
 }
 
-export function useHls({ url, autoplay = true, onError }: UseHlsOptions) {
+export function useHls({ url, autoplay = true, direct = false, onError }: UseHlsOptions) {
+  const reportError = useEffectEvent(() => onError?.())
   const videoRef = useRef<HTMLVideoElement | null>(null)
-  const [supported] = useState(() => Hls.isSupported() || !!document.createElement('video').canPlayType('application/vnd.apple.mpegurl'))
+  const [supported] = useState(() => direct || Hls.isSupported() || !!document.createElement('video').canPlayType('application/vnd.apple.mpegurl'))
   const [isLoading, setIsLoading] = useState(supported)
   const [error, setError] = useState<string | null>(null)
   const [attempt, setAttempt] = useState(0)
@@ -18,10 +21,9 @@ export function useHls({ url, autoplay = true, onError }: UseHlsOptions) {
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
-    if (!supported) { onError?.(); return }
+    if (!supported) { reportError(); return }
 
     let hls: Hls | undefined
-    let recoveryTimer: ReturnType<typeof setTimeout> | undefined
     let networkRecoveries = 0
     let mediaRecoveries = 0
     let disposed = false
@@ -29,19 +31,27 @@ export function useHls({ url, autoplay = true, onError }: UseHlsOptions) {
     const fail = () => {
       if (disposed || failed) return
       failed = true
-      clearTimeout(recoveryTimer)
+      watchdog.dispose()
+      hls?.stopLoad()
       setError('No se ha podido conectar con el canal')
       setIsLoading(false)
-      onError?.()
+      reportError()
     }
-    const loaded = () => { if (!disposed) setIsLoading(false) }
-    const waiting = () => { if (!disposed) setIsLoading(true) }
-    const play = () => { if (autoplay) video.play().catch(() => { /* Native controls allow playback when autoplay is blocked. */ }) }
-    video.addEventListener('loadeddata', loaded)
-    video.addEventListener('playing', loaded)
-    video.addEventListener('waiting', waiting)
+    const watchdog = watchPlayback(video, {
+      onTimeout: fail,
+      onReady: () => { if (!disposed && !failed) setIsLoading(false) },
+      onLoading: () => { if (!disposed && !failed) setIsLoading(true) },
+    })
+    const play = () => {
+      if (autoplay) video.play().catch((error: DOMException) => {
+        if (disposed || failed) return
+        if (error.name === 'NotAllowedError') watchdog.autoplayBlocked()
+        else if (error.name !== 'AbortError') fail()
+      })
+      else watchdog.autoplayBlocked()
+    }
 
-    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    if (direct || video.canPlayType('application/vnd.apple.mpegurl')) {
       video.addEventListener('error', fail)
       video.src = url
       play()
@@ -49,13 +59,13 @@ export function useHls({ url, autoplay = true, onError }: UseHlsOptions) {
       hls = new Hls({ enableWorker: true, maxBufferLength: 30, maxMaxBufferLength: 60, startLevel: -1 })
       hls.loadSource(url)
       hls.attachMedia(video)
-      hls.on(Hls.Events.MANIFEST_PARSED, () => { loaded(); play() })
-      hls.on(Hls.Events.FRAG_LOADED, () => { clearTimeout(recoveryTimer); loaded() })
+      hls.on(Hls.Events.MANIFEST_PARSED, play)
       hls.on(Hls.Events.ERROR, (_event, data) => {
         if (!data.fatal || disposed) return
+        const status = data.response?.code
+        if (status && status >= 400 && status < 500) { fail(); return }
         if (data.type === Hls.ErrorTypes.NETWORK_ERROR && networkRecoveries++ === 0) {
           hls?.startLoad()
-          recoveryTimer = setTimeout(fail, 5000)
         } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR && mediaRecoveries++ === 0) {
           hls?.recoverMediaError()
         } else fail()
@@ -64,17 +74,14 @@ export function useHls({ url, autoplay = true, onError }: UseHlsOptions) {
 
     return () => {
       disposed = true
-      clearTimeout(recoveryTimer)
-      video.removeEventListener('loadeddata', loaded)
-      video.removeEventListener('playing', loaded)
-      video.removeEventListener('waiting', waiting)
+      watchdog.dispose()
       video.removeEventListener('error', fail)
       hls?.destroy()
       video.pause()
       video.removeAttribute('src')
       video.load()
     }
-  }, [url, autoplay, onError, supported, attempt])
+  }, [url, autoplay, direct, supported, attempt])
 
   const retry = useCallback(() => {
     setError(null)

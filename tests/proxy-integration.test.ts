@@ -1,81 +1,49 @@
-import { describe, it, expect } from 'vitest'
+import { beforeAll, describe, it, expect } from 'vitest'
 
-const PROXY = 'http://localhost:3555'
+const PROXY = process.env.TV_ESP_PROXY || 'http://localhost:3555'
 
-async function proxyIsRunning(): Promise<boolean> {
-  try {
-    const res = await fetch(`${PROXY}/health`, { signal: AbortSignal.timeout(2000) })
-    return res.ok
-  } catch {
-    return false
-  }
-}
-
-describe('HLS Proxy (requires running proxy on :3555)', () => {
-  it('health check responds', async () => {
-    if (!(await proxyIsRunning())) return // skip if proxy not running
-
-    const res = await fetch(`${PROXY}/health`)
-    expect(res.status).toBe(200)
-    const data = await res.json()
-    expect(data.ok).toBe(true)
+// External broadcasters change independently of commits. Enable these checks
+// explicitly; deterministic resolver/proxy regressions run in test:unit and CI.
+describe.skipIf(process.env.TV_ESP_LIVE_TESTS !== '1')('live broadcasters through the local proxy', () => {
+  beforeAll(async () => {
+    const response = await fetch(`${PROXY}/health`, { signal: AbortSignal.timeout(2000) })
+    expect(response.ok, 'Start the proxy before running live checks').toBe(true)
   })
 
-  it('proxies RTVE La 1 m3u8', async () => {
-    if (!(await proxyIsRunning())) return
+  it('proxies RTVE La 1 and rewrites its child playlists', async () => {
+    const url = encodeURIComponent('https://rtvelivestream.rtve.es/rtvesec/la1/la1_main_dvr.m3u8')
+    const response = await fetch(`${PROXY}/proxy?url=${url}`)
+    expect(response.status).toBe(200)
+    expect(await response.text()).toContain(`${PROXY}/proxy?url=`)
+  }, 20000)
 
-    const url = encodeURIComponent('https://ztnr.rtve.es/ztnr/1688877.m3u8')
-    const res = await fetch(`${PROXY}/proxy?url=${url}`)
-    expect(res.status).toBe(200)
-    const body = await res.text()
-    expect(body).toContain('#EXTM3U')
-    // Verify URL rewriting: segment URLs should point back through the proxy
-    expect(body).toContain(`${PROXY}/proxy?url=`)
-  })
+  it.each(['antena3', 'lasexta', 'neox', 'nova', 'mega', 'atreseries'])('%s resolves all official HLS alternatives and its SSAI master', async slug => {
+    const resolution = await fetch(`${PROXY}/sources?ch=${slug}`)
+    expect(resolution.status).toBe(200)
+    const { sources } = await resolution.json()
+    const hls = sources.filter((source: { type: string }) => source.type === 'hls')
+    expect(hls.length).toBeGreaterThan(1)
+    expect(hls[0].label).toBe('Atresplayer')
+    const response = await fetch(`${PROXY}/proxy?url=${encodeURIComponent(hls[0].url)}`, { signal: AbortSignal.timeout(15000) })
+    expect(response.status).toBe(200)
+    expect(await response.text()).toContain('#EXTM3U')
+  }, 25000)
 
-  it('Atresplayer API returns valid m3u8 for Antena 3', async () => {
-    if (!(await proxyIsRunning())) return
+  it.each(['antena3', 'lasexta'])('%s serves a real compatible MP4 stream', async slug => {
+    const controller = new AbortController()
+    try {
+      const response = await fetch(`${PROXY}/compatible?ch=${slug}`, { signal: AbortSignal.any([controller.signal, AbortSignal.timeout(25000)]) })
+      expect(response.status).toBe(200)
+      expect(response.headers.get('content-type')).toContain('video/mp4')
+      const reader = response.body!.getReader()
+      const firstChunk = await reader.read()
+      expect(Buffer.from(firstChunk.value!).toString('ascii')).toContain('ftyp')
+      await reader.cancel()
+    } finally { controller.abort() }
+  }, 30000)
 
-    const res = await fetch(`${PROXY}/atresplayer?ch=antena3`, { redirect: 'follow' })
-    expect(res.status).toBe(200)
-    const body = await res.text()
-    expect(body).toContain('#EXTM3U')
-    expect(body).toContain('antena3')
-  })
-
-  it('Atresplayer API returns valid m3u8 for La Sexta', async () => {
-    if (!(await proxyIsRunning())) return
-
-    const res = await fetch(`${PROXY}/atresplayer?ch=lasexta`, { redirect: 'follow' })
-    expect(res.status).toBe(200)
-    const body = await res.text()
-    expect(body).toContain('#EXTM3U')
-    expect(body).toContain('lasexta')
-  })
-
-  it('Atresplayer API returns 404 for unknown channel', async () => {
-    if (!(await proxyIsRunning())) return
-
-    const res = await fetch(`${PROXY}/atresplayer?ch=nonexistent`, { redirect: 'follow' })
-    expect(res.status).toBe(404)
-  })
-
-  it('proxy returns 400 without url parameter', async () => {
-    if (!(await proxyIsRunning())) return
-
-    const res = await fetch(`${PROXY}/proxy`)
-    expect(res.status).toBe(400)
-  })
-
-  it('all 6 Atresmedia channels resolve', async () => {
-    if (!(await proxyIsRunning())) return
-
-    const slugs = ['antena3', 'lasexta', 'neox', 'nova', 'mega', 'atreseries']
-    for (const slug of slugs) {
-      const res = await fetch(`${PROXY}/atresplayer?ch=${slug}`, { redirect: 'follow' })
-      expect(res.status, `${slug} failed with ${res.status}`).toBe(200)
-      const body = await res.text()
-      expect(body, `${slug} did not return m3u8`).toContain('#EXTM3U')
-    }
+  it('rejects unknown channels and missing proxy URLs', async () => {
+    expect((await fetch(`${PROXY}/atresplayer?ch=nonexistent`)).status).toBe(404)
+    expect((await fetch(`${PROXY}/proxy`)).status).toBe(400)
   })
 })

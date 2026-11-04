@@ -17,7 +17,7 @@ export function IframePlayer({ url, title, onError }: Props) {
         className="embedded-player"
         allowFullScreen
         allow="autoplay; encrypted-media; picture-in-picture"
-        referrerPolicy="no-referrer"
+        referrerPolicy="strict-origin-when-cross-origin"
         sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
         onLoad={() => setIsLoading(false)}
         onError={() => { setIsLoading(false); onError() }}

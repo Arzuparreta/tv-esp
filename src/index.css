@@ -131,6 +131,12 @@ h1, h2, h3, p { margin: 0; }
 .player-content { display: flex; min-height: 0; flex: 1; overflow: hidden; }
 .player-stage { min-width: 0; flex: 1; aspect-ratio: 16 / 9; background: #000; position: relative; display: flex; align-items: center; justify-content: center; }
 .video-surface { position: absolute; inset: 0; }
+.channel-playback { position: absolute; inset: 0; display: flex; flex-direction: column; }
+.source-player { flex: 1; min-height: 0; position: relative; display: flex; overflow: auto; }
+.source-actions { flex-shrink: 0; display: flex; align-items: center; gap: 14px; padding: 0 12px; background: #171719; font-size: 12px; }
+.source-actions > span { margin-right: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #b0b0b8; }
+.source-actions button, .source-actions a { min-height: 44px; display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; }
+.source-actions svg { width: 14px; height: 14px; }
 .embedded-player { width: 100%; height: 100%; border: 0; }
 .video-surface video { width: 100%; height: 100%; object-fit: contain; }
 .player-channel-list { width: 260px; max-height: 60dvh; flex-shrink: 0; overflow-y: auto; overscroll-behavior: contain; padding: 6px 10px 12px; background: #222225; }

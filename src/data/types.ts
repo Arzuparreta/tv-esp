@@ -24,12 +24,13 @@ export const CATEGORY_ORDER: Category[] = [
   'autonomicos',
 ]
 
-export type SourceType = 'hls' | 'iframe' | 'youtube' | 'web' | 'atres'
+export type SourceType = 'hls' | 'video' | 'iframe' | 'youtube' | 'web' | 'atres'
 
 export interface Source {
   type: SourceType
   url: string
   label?: string
+  priority?: number
 }
 
 export interface Channel {
