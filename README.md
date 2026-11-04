@@ -223,7 +223,7 @@ Ejecuta `npm test` para verificar que no has roto nada.
 
 La navegación sigue las guías actuales de Apple para [iPadOS](https://developer.apple.com/design/human-interface-guidelines/designing-for-ipados) y [materiales](https://developer.apple.com/design/human-interface-guidelines/materials): superficies simples para el contenido y translucidez limitada a navegación y barras. En móvil, En directo, Favoritos y Buscar quedan al alcance del pulgar. A partir de 760 px aparece la navegación lateral; la cuadrícula adapta su densidad al espacio disponible, también en Split View.
 
-Las pruebas de Playwright cubren favoritos persistentes, búsqueda, categorías, foco del reproductor, tamaños de 320 a 1440 px, orientación de iPad, logotipos y apariencia clara/oscura. En Linux con Chromium del sistema se puede usar `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:ui -- --project=desktop --project=mobile`.
+Las pruebas de navegador se ejecutan en local; CI solo ejecuta lint, build y tests unitarios. Las pruebas de Playwright cubren favoritos persistentes, búsqueda, categorías, foco del reproductor, tamaños de 320 a 1440 px, orientación de iPad, logotipos y apariencia clara/oscura. En Linux con Chromium del sistema se puede usar `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:ui -- --project=desktop --project=mobile`.
 
 Los logotipos de `public/logos/` proceden de [tv-logo/tv-logos](https://github.com/tv-logo/tv-logos), de las fuentes originales del registro de canales y de RTVE (La 1 y La 2, variantes coloreadas para fondos claros). Las marcas pertenecen a sus respectivos canales.
 
