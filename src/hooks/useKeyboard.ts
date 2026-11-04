@@ -7,7 +7,8 @@ export function useKeyboard(keyMap: KeyMap, active = true) {
     if (!active) return
     const handler = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName
-      if (tag === 'INPUT' || tag === 'TEXTAREA') return
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'VIDEO' || (e.target as HTMLElement)?.isContentEditable) return
+      if (e.altKey || e.ctrlKey || e.metaKey) return
 
       const fn = keyMap[e.key] || keyMap[e.code]
       if (fn) {

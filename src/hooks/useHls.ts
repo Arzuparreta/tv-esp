@@ -7,104 +7,80 @@ interface UseHlsOptions {
   onError?: () => void
 }
 
-interface UseHlsReturn {
-  videoRef: React.RefObject<HTMLVideoElement | null>
-  isLoading: boolean
-  error: string | null
-  retry: () => void
-}
-
-export function useHls({ url, autoplay = true, onError }: UseHlsOptions): UseHlsReturn {
+export function useHls({ url, autoplay = true, onError }: UseHlsOptions) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
-  const hlsRef = useRef<Hls | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [supported] = useState(() => Hls.isSupported() || !!document.createElement('video').canPlayType('application/vnd.apple.mpegurl'))
+  const [isLoading, setIsLoading] = useState(supported)
   const [error, setError] = useState<string | null>(null)
+  const [attempt, setAttempt] = useState(0)
 
-  const destroy = useCallback(() => {
-    if (hlsRef.current) {
-      hlsRef.current.destroy()
-      hlsRef.current = null
-    }
-  }, [])
-
-  const attach = useCallback(() => {
+  // HlsPlayer is keyed by source URL, so each source starts with fresh loading state.
+  useEffect(() => {
     const video = videoRef.current
-    if (!video || !url) return
+    if (!video) return
+    if (!supported) { onError?.(); return }
 
-    destroy()
-    setIsLoading(true)
-    setError(null)
+    let hls: Hls | undefined
+    let recoveryTimer: ReturnType<typeof setTimeout> | undefined
+    let networkRecoveries = 0
+    let mediaRecoveries = 0
+    let disposed = false
+    let failed = false
+    const fail = () => {
+      if (disposed || failed) return
+      failed = true
+      clearTimeout(recoveryTimer)
+      setError('No se ha podido conectar con el canal')
+      setIsLoading(false)
+      onError?.()
+    }
+    const loaded = () => { if (!disposed) setIsLoading(false) }
+    const waiting = () => { if (!disposed) setIsLoading(true) }
+    const play = () => { if (autoplay) video.play().catch(() => { /* Native controls allow playback when autoplay is blocked. */ }) }
+    video.addEventListener('loadeddata', loaded)
+    video.addEventListener('playing', loaded)
+    video.addEventListener('waiting', waiting)
 
     if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      // Safari native HLS
+      video.addEventListener('error', fail)
       video.src = url
-      if (autoplay) video.play().catch(() => {})
-      video.addEventListener('loadeddata', () => setIsLoading(false), { once: true })
-      video.addEventListener('error', () => {
-        setError('Error de reproducción')
-        setIsLoading(false)
-        onError?.()
-      }, { once: true })
-      return
+      play()
+    } else {
+      hls = new Hls({ enableWorker: true, maxBufferLength: 30, maxMaxBufferLength: 60, startLevel: -1 })
+      hls.loadSource(url)
+      hls.attachMedia(video)
+      hls.on(Hls.Events.MANIFEST_PARSED, () => { loaded(); play() })
+      hls.on(Hls.Events.FRAG_LOADED, () => { clearTimeout(recoveryTimer); loaded() })
+      hls.on(Hls.Events.ERROR, (_event, data) => {
+        if (!data.fatal || disposed) return
+        if (data.type === Hls.ErrorTypes.NETWORK_ERROR && networkRecoveries++ === 0) {
+          hls?.startLoad()
+          recoveryTimer = setTimeout(fail, 5000)
+        } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR && mediaRecoveries++ === 0) {
+          hls?.recoverMediaError()
+        } else fail()
+      })
     }
 
-    if (!Hls.isSupported()) {
-      setError('Tu navegador no soporta HLS')
-      setIsLoading(false)
-      return
+    return () => {
+      disposed = true
+      clearTimeout(recoveryTimer)
+      video.removeEventListener('loadeddata', loaded)
+      video.removeEventListener('playing', loaded)
+      video.removeEventListener('waiting', waiting)
+      video.removeEventListener('error', fail)
+      hls?.destroy()
+      video.pause()
+      video.removeAttribute('src')
+      video.load()
     }
+  }, [url, autoplay, onError, supported, attempt])
 
-    const hls = new Hls({
-      enableWorker: true,
-      lowLatencyMode: false,
-      maxBufferLength: 30,
-      maxMaxBufferLength: 60,
-      startLevel: -1,
-      fragLoadingMaxRetry: 3,
-      manifestLoadingMaxRetry: 3,
-      levelLoadingMaxRetry: 3,
-    })
+  const retry = useCallback(() => {
+    setError(null)
+    setIsLoading(supported)
+    setAttempt(value => value + 1)
+  }, [supported])
 
-    hlsRef.current = hls
-    hls.loadSource(url)
-    hls.attachMedia(video)
-
-    hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      setIsLoading(false)
-      if (autoplay) video.play().catch(() => {})
-    })
-
-    hls.on(Hls.Events.ERROR, (_event, data) => {
-      if (data.fatal) {
-        switch (data.type) {
-          case Hls.ErrorTypes.NETWORK_ERROR:
-            // Try to recover once, then give up
-            hls.startLoad()
-            setTimeout(() => {
-              if (hlsRef.current === hls) {
-                setError('Error de red')
-                setIsLoading(false)
-                onError?.()
-              }
-            }, 5000)
-            break
-          case Hls.ErrorTypes.MEDIA_ERROR:
-            hls.recoverMediaError()
-            break
-          default:
-            setError('Error de reproducción')
-            setIsLoading(false)
-            onError?.()
-            break
-        }
-      }
-    })
-  }, [url, autoplay, onError, destroy])
-
-  useEffect(() => {
-    attach()
-    return destroy
-  }, [attach, destroy])
-
-  return { videoRef, isLoading, error, retry: attach }
+  return { videoRef, isLoading, error: supported ? error : 'Tu navegador no soporta HLS', retry }
 }

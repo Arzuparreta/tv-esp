@@ -5,13 +5,14 @@ const STORAGE_KEY = 'tv-esp-favorites'
 function loadFavorites(): Set<string> {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) return new Set(JSON.parse(raw))
+    const stored: unknown = raw ? JSON.parse(raw) : []
+    if (Array.isArray(stored)) return new Set(stored.filter((id): id is string => typeof id === 'string'))
   } catch { /* ignore */ }
   return new Set()
 }
 
 function saveFavorites(ids: Set<string>) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...ids]))
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...ids])) } catch { /* Favorites remain usable when storage is unavailable. */ }
 }
 
 export function useFavorites() {

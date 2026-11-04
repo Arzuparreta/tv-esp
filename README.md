@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>Toda la televisión pública española en una sola webapp.</strong><br>
-  Interfaz premium con glassmorphism, reproductor HLS de alto rendimiento y cero anuncios.
+  Televisión en directo con una interfaz adaptada a móvil, iPad y escritorio.
 </p>
 
 <p align="center">
@@ -39,7 +39,10 @@ Una webapp para ver **todos los canales gratuitos de la TDT española** desde cu
 - **Reproductor HLS** de alto rendimiento con [hls.js](https://github.com/video-dev/hls.js) — bitrate adaptativo, hasta 1080p
 - **Proxy backend** que resuelve CORS y obtiene tokens dinámicos de la API de Atresplayer
 - **Multi-fuente con fallback** — si un stream falla, salta automáticamente al siguiente
-- **Glassmorphism UI** — diseño dark-first inspirado en Apple, animaciones suaves
+- **Navegación adaptativa** — barra inferior en móvil y barra lateral plegable en iPad y escritorio
+- **Claro y oscuro** — sigue la apariencia del sistema, con tipografía nativa y controles táctiles de al menos 44 px
+- **Reproducción accesible** — controles de vídeo nativos, selector de canales, foco contenido y retorno al canal al cerrar
+- **Logotipos locales** — la cuadrícula no depende de peticiones a redes sociales
 - **Favoritos** guardados en localStorage
 - **Búsqueda y filtro** por categoría
 - **Atajos de teclado** — `Escape` para cerrar, `F` para fullscreen, `M` para sidebar
@@ -148,7 +151,14 @@ El build se genera en `dist/`. Sirve los estáticos con cualquier servidor web y
 ## Tests
 
 ```bash
-# Unit tests (channels, player logic)
+# Pruebas de canales y lógica de reproducción
+npm run test:unit
+
+# Pruebas de interfaz en Chromium (desktop y móvil) y WebKit (iPad)
+npx playwright install --with-deps chromium webkit
+npm run test:ui
+
+# Incluye las integraciones en vivo con el proxy local
 npm test
 
 # Watch mode durante desarrollo
@@ -182,7 +192,7 @@ tv-esp/
 │   │   ├── player.ts       # Source resolution & fallback logic
 │   │   └── proxy.ts        # Proxy URL helpers
 │   ├── App.tsx
-│   ├── index.css           # Glassmorphism styles + Tailwind
+│   ├── index.css           # Adaptive layout, themes and accessibility
 │   └── main.tsx
 ├── tests/                  # Vitest test suites
 ├── public/                 # favicon, icons
@@ -208,6 +218,14 @@ Edita `src/data/channels.ts` y añade una entrada:
 ```
 
 Ejecuta `npm test` para verificar que no has roto nada.
+
+## Diseño y validación de interfaz
+
+La navegación sigue las guías actuales de Apple para [iPadOS](https://developer.apple.com/design/human-interface-guidelines/designing-for-ipados) y [materiales](https://developer.apple.com/design/human-interface-guidelines/materials): superficies simples para el contenido y translucidez limitada a navegación y barras. En móvil, En directo, Favoritos y Buscar quedan al alcance del pulgar. A partir de 760 px aparece la navegación lateral; la cuadrícula adapta su densidad al espacio disponible, también en Split View.
+
+Las pruebas de Playwright cubren favoritos persistentes, búsqueda, categorías, foco del reproductor, tamaños de 320 a 1440 px, orientación de iPad, logotipos y apariencia clara/oscura. En Linux con Chromium del sistema se puede usar `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:ui -- --project=desktop --project=mobile`.
+
+Los logotipos de `public/logos/` proceden de [tv-logo/tv-logos](https://github.com/tv-logo/tv-logos), de las fuentes originales del registro de canales y de RTVE (La 1 y La 2, variantes coloreadas para fondos claros). Las marcas pertenecen a sus respectivos canales.
 
 ## Notas
 
