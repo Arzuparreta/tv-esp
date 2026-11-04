@@ -5,7 +5,7 @@ export const channels: Channel[] = [
   {
     id: 'la1',
     name: 'La 1',
-    logo: 'https://pbs.twimg.com/profile_images/2008842210414915584/zIp_go25_200x200.jpg',
+    logo: '/logos/la1.svg',
     category: 'principales',
     epgId: 'La1.TV',
     web: 'https://www.rtve.es/play/videos/directo/la-1/',
@@ -18,7 +18,7 @@ export const channels: Channel[] = [
   {
     id: 'la2',
     name: 'La 2',
-    logo: 'https://yt3.googleusercontent.com/ytc/AIdro_kqgHWySi5xprs1VFCNCX0IKNT8yXBLZC43JMoB8j0JUto=s200',
+    logo: '/logos/la2.svg',
     category: 'principales',
     epgId: 'La2.TV',
     web: 'https://www.rtve.es/play/videos/directo/la-2/',
@@ -31,7 +31,7 @@ export const channels: Channel[] = [
   {
     id: 'antena3',
     name: 'Antena 3',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Logo_Antena_3_%282017%29.svg/200px-Logo_Antena_3_%282017%29.svg.png',
+    logo: '/logos/antena3.png',
     category: 'principales',
     epgId: 'Antena3.TV',
     web: 'https://www.atresplayer.com/directos/antena3/',
@@ -43,7 +43,7 @@ export const channels: Channel[] = [
   {
     id: 'lasexta',
     name: 'La Sexta',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Logo_laSexta.svg/200px-Logo_laSexta.svg.png',
+    logo: '/logos/lasexta.png',
     category: 'principales',
     epgId: 'LaSexta.TV',
     web: 'https://www.atresplayer.com/directos/lasexta/',
@@ -55,7 +55,7 @@ export const channels: Channel[] = [
   {
     id: 'cuatro',
     name: 'Cuatro',
-    logo: 'https://graph.facebook.com/cuatro/picture?width=200&height=200',
+    logo: '/logos/cuatro.png',
     category: 'principales',
     epgId: 'Cuatro.TV',
     web: 'https://www.mitele.es/directo/cuatro',
@@ -66,7 +66,7 @@ export const channels: Channel[] = [
   {
     id: 'telecinco',
     name: 'Telecinco',
-    logo: 'https://graph.facebook.com/tele5/picture?width=200&height=200',
+    logo: '/logos/telecinco.png',
     category: 'principales',
     epgId: 'Telecinco.TV',
     web: 'https://www.mitele.es/directo/telecinco',
@@ -79,7 +79,7 @@ export const channels: Channel[] = [
   {
     id: '24h',
     name: '24 Horas',
-    logo: 'https://pbs.twimg.com/profile_images/1634293543987453954/mb1Rzmso_200x200.jpg',
+    logo: '/logos/24h.png',
     category: 'informativos',
     epgId: '24Horas.TV',
     web: 'https://www.rtve.es/play/videos/directo/24h/',
@@ -92,7 +92,7 @@ export const channels: Channel[] = [
   {
     id: 'euronews',
     name: 'Euronews',
-    logo: 'https://graph.facebook.com/es.euronews/picture?width=200&height=200',
+    logo: '/logos/euronews.jpg',
     category: 'informativos',
     epgId: 'Euronews.TV',
     web: 'https://es.euronews.com/live',
@@ -104,7 +104,7 @@ export const channels: Channel[] = [
   {
     id: '3catinfo',
     name: '3Cat Info',
-    logo: 'https://pbs.twimg.com/profile_images/1968163923477098496/blka6O_j_200x200.jpg',
+    logo: '/logos/3catinfo.jpg',
     category: 'informativos',
     epgId: '324.TV',
     web: 'https://www.3cat.cat/3cat/directes/3catinfo-tv/',
@@ -115,7 +115,7 @@ export const channels: Channel[] = [
   {
     id: 'elpais',
     name: 'El País',
-    logo: 'https://graph.facebook.com/elpais/picture?width=200&height=200',
+    logo: '/logos/elpais.jpg',
     category: 'informativos',
     epgId: 'ElPais.TV',
     web: 'https://elpais.com',
@@ -127,7 +127,7 @@ export const channels: Channel[] = [
   {
     id: 'elconfidencial',
     name: 'El Confidencial',
-    logo: 'https://graph.facebook.com/elconfidencial/picture?width=200&height=200',
+    logo: '/logos/elconfidencial.jpg',
     category: 'informativos',
     epgId: 'ElConfidencial.TV',
     web: 'https://www.elconfidencial.com/television/',
@@ -138,7 +138,7 @@ export const channels: Channel[] = [
   {
     id: 'negociostv',
     name: 'Negocios TV',
-    logo: 'https://pbs.twimg.com/profile_images/1321367703731523584/bNMmbetI_200x200.jpg',
+    logo: '/logos/negociostv.png',
     category: 'informativos',
     web: 'https://www.negocios.com/directo',
     sources: [
@@ -151,7 +151,7 @@ export const channels: Channel[] = [
   {
     id: 'teledeporte',
     name: 'Teledeporte',
-    logo: 'https://graph.facebook.com/teledeporteRTVE/picture?width=200&height=200',
+    logo: '/logos/teledeporte.png',
     category: 'deportes',
     epgId: 'TDP.TV',
     web: 'https://www.rtve.es/play/videos/directo/tdp/',
@@ -164,7 +164,7 @@ export const channels: Channel[] = [
   {
     id: 'realmadridtv',
     name: 'Real Madrid TV',
-    logo: 'https://graph.facebook.com/RealMadrid/picture?width=200&height=200',
+    logo: '/logos/realmadridtv.png',
     category: 'deportes',
     epgId: 'RMTV.TV',
     web: 'https://www.realmadrid.com/real-madrid-tv',
@@ -175,7 +175,7 @@ export const channels: Channel[] = [
   {
     id: 'topbarca',
     name: 'Top Barça',
-    logo: 'https://images-0.rakuten.tv/storage/global-live-channel/translation/artwork/ff403089-1c81-41d3-bb18-b817b1f01721-width200-quality90.jpeg',
+    logo: '/logos/topbarca.jpg',
     category: 'deportes',
     epgId: 'Top_Barça.TV',
     web: 'https://www.rakuten.tv/es/live_channels/top-barca-es',
@@ -186,7 +186,7 @@ export const channels: Channel[] = [
   {
     id: 'gol',
     name: 'GOL',
-    logo: 'https://graph.facebook.com/goltv.es/picture?width=200&height=200',
+    logo: '/logos/gol.png',
     category: 'deportes',
     epgId: 'GOL.TV',
     web: 'https://www.goltelevision.com/en-directo/gol_live',
@@ -197,7 +197,7 @@ export const channels: Channel[] = [
   {
     id: 'etbdeportes',
     name: 'ETB Deportes',
-    logo: 'https://graph.facebook.com/deportes.eitb.kirolak/picture?width=200&height=200',
+    logo: '/logos/etbdeportes.jpg',
     category: 'deportes',
     web: 'https://www.eitb.eus/es/deportes/deporte-en-directo/',
     sources: [
@@ -210,7 +210,7 @@ export const channels: Channel[] = [
   {
     id: 'neox',
     name: 'Neox',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Neox_logo.svg/200px-Neox_logo.svg.png',
+    logo: '/logos/neox.png',
     category: 'tematicos',
     epgId: 'Neox.TV',
     web: 'https://www.atresplayer.com/directos/neox/',
@@ -222,7 +222,7 @@ export const channels: Channel[] = [
   {
     id: 'nova',
     name: 'Nova',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Nova_TV_logo.svg/200px-Nova_TV_logo.svg.png',
+    logo: '/logos/nova.png',
     category: 'tematicos',
     epgId: 'Nova.TV',
     web: 'https://www.atresplayer.com/directos/nova/',
@@ -234,7 +234,7 @@ export const channels: Channel[] = [
   {
     id: 'mega',
     name: 'Mega',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Mega_%28canal_de_televisi%C3%B3n%29_Logo.svg/200px-Mega_%28canal_de_televisi%C3%B3n%29_Logo.svg.png',
+    logo: '/logos/mega.png',
     category: 'tematicos',
     epgId: 'Mega.TV',
     web: 'https://www.atresplayer.com/directos/mega/',
@@ -246,7 +246,7 @@ export const channels: Channel[] = [
   {
     id: 'atreseries',
     name: 'Atreseries',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Atreseries_2017_logo.svg/200px-Atreseries_2017_logo.svg.png',
+    logo: '/logos/atreseries.png',
     category: 'tematicos',
     epgId: 'Atreseries.TV',
     web: 'https://www.atresplayer.com/directos/atreseries/',
@@ -258,7 +258,7 @@ export const channels: Channel[] = [
   {
     id: 'fdf',
     name: 'FDF',
-    logo: 'https://graph.facebook.com/factoriadeficcion/picture?width=200&height=200',
+    logo: '/logos/fdf.png',
     category: 'tematicos',
     epgId: 'FDF.TV',
     web: 'https://www.mitele.es/directo/fdf',
@@ -269,7 +269,7 @@ export const channels: Channel[] = [
   {
     id: 'energy',
     name: 'Energy',
-    logo: 'https://graph.facebook.com/E.EnergyTV/picture?width=200&height=200',
+    logo: '/logos/energy.png',
     category: 'tematicos',
     epgId: 'Energy.TV',
     web: 'https://www.mitele.es/directo/energy',
@@ -280,7 +280,7 @@ export const channels: Channel[] = [
   {
     id: 'divinity',
     name: 'Divinity',
-    logo: 'https://graph.facebook.com/divinityes/picture?width=200&height=200',
+    logo: '/logos/divinity.png',
     category: 'tematicos',
     epgId: 'Divinity.TV',
     web: 'https://www.mitele.es/directo/divinity',
@@ -291,7 +291,7 @@ export const channels: Channel[] = [
   {
     id: 'bemad',
     name: 'Be Mad',
-    logo: 'https://graph.facebook.com/BeMadTV/picture?width=200&height=200',
+    logo: '/logos/bemad.png',
     category: 'tematicos',
     epgId: 'Bemad.TV',
     web: 'https://www.mitele.es/directo/bemad',
@@ -302,7 +302,7 @@ export const channels: Channel[] = [
   {
     id: 'dmax',
     name: 'DMAX',
-    logo: 'https://graph.facebook.com/DMAXes/picture?width=200&height=200',
+    logo: '/logos/dmax.png',
     category: 'tematicos',
     epgId: 'DMax.TV',
     web: 'https://dmax.marca.com/en-directo',
@@ -313,7 +313,7 @@ export const channels: Channel[] = [
   {
     id: 'trece',
     name: 'TRECE',
-    logo: 'https://graph.facebook.com/TRECEtves/picture?width=200&height=200',
+    logo: '/logos/trece.png',
     category: 'tematicos',
     epgId: '13.TV',
     web: 'https://www.cope.es/directos/trece',
@@ -324,7 +324,7 @@ export const channels: Channel[] = [
   {
     id: 'eltorotv',
     name: 'El Toro TV',
-    logo: 'https://graph.facebook.com/eltorotv.es/picture?width=200&height=200',
+    logo: '/logos/eltorotv.png',
     category: 'tematicos',
     epgId: 'ElToroTV.TV',
     web: 'https://eltorotv.com/tv-en-directo',
@@ -336,7 +336,7 @@ export const channels: Channel[] = [
   {
     id: 'larevuelta',
     name: 'La Revuelta',
-    logo: 'https://graph.facebook.com/rtveplay/picture?width=200&height=200',
+    logo: '/logos/larevuelta.jpg',
     category: 'tematicos',
     web: 'https://www.rtve.es/play/videos/directo/canales-rtve/play-larevuelta/',
     sources: [
@@ -346,7 +346,7 @@ export const channels: Channel[] = [
   {
     id: 'somoscine',
     name: 'Somos Cine',
-    logo: 'https://graph.facebook.com/rtveplay/picture?width=200&height=200',
+    logo: '/logos/somoscine.jpg',
     category: 'tematicos',
     web: 'https://www.rtve.es/play/videos/directo/canales-rtve/play-cine/',
     sources: [
@@ -356,7 +356,7 @@ export const channels: Channel[] = [
   {
     id: 'cuentame',
     name: 'Cuéntame',
-    logo: 'https://graph.facebook.com/rtveplay/picture?width=200&height=200',
+    logo: '/logos/cuentame.jpg',
     category: 'tematicos',
     web: 'https://www.rtve.es/play/videos/directo/canales-rtve/play-cuentame/',
     sources: [
@@ -366,7 +366,7 @@ export const channels: Channel[] = [
   {
     id: 'cocina',
     name: 'Cocina RTVE',
-    logo: 'https://graph.facebook.com/rtveplay/picture?width=200&height=200',
+    logo: '/logos/cocina.jpg',
     category: 'tematicos',
     web: 'https://www.rtve.es/play/videos/directo/canales-rtve/play-cocina/',
     sources: [
@@ -378,7 +378,7 @@ export const channels: Channel[] = [
   {
     id: 'clan',
     name: 'Clan TVE',
-    logo: 'https://graph.facebook.com/clantve/picture?width=200&height=200',
+    logo: '/logos/clan.png',
     category: 'infantiles',
     epgId: 'Clan.TV',
     web: 'https://www.rtve.es/play/videos/directo/clan/',
@@ -391,7 +391,7 @@ export const channels: Channel[] = [
   {
     id: 'boing',
     name: 'Boing',
-    logo: 'https://graph.facebook.com/boinges/picture?width=200&height=200',
+    logo: '/logos/boing.png',
     category: 'infantiles',
     epgId: 'Boing.TV',
     web: 'https://www.mitele.es/directo/boing',
@@ -402,7 +402,7 @@ export const channels: Channel[] = [
   {
     id: 'disneychannel',
     name: 'Disney Channel',
-    logo: 'https://graph.facebook.com/DisneyChannelES/picture?width=200&height=200',
+    logo: '/logos/disneychannel.png',
     category: 'infantiles',
     web: 'https://www.youtube.com/@disneychannelES/streams',
     sources: [
@@ -412,7 +412,7 @@ export const channels: Channel[] = [
   {
     id: 'pocoyo',
     name: 'Pocoyó',
-    logo: 'https://graph.facebook.com/pocoyo/picture?width=200&height=200',
+    logo: '/logos/pocoyo.jpg',
     category: 'infantiles',
     web: 'https://www.pocoyo.com',
     sources: [
@@ -424,7 +424,7 @@ export const channels: Channel[] = [
   {
     id: 'tv3',
     name: 'TV3',
-    logo: 'https://statics.3cat.cat/resources/images/logos/3cat/tv3-logo-200x200.png',
+    logo: '/logos/tv3.png',
     category: 'autonomicos',
     epgId: 'TV3.TV',
     web: 'https://www.3cat.cat/3cat/directes/tv3/',
@@ -436,7 +436,7 @@ export const channels: Channel[] = [
   {
     id: 'etb1',
     name: 'ETB 1',
-    logo: 'https://graph.facebook.com/eitaborri/picture?width=200&height=200',
+    logo: '/logos/etb1.png',
     category: 'autonomicos',
     epgId: 'ETB1.TV',
     web: 'https://www.eitb.eus/es/television/etb1/directo/',
@@ -447,7 +447,7 @@ export const channels: Channel[] = [
   {
     id: 'etb2',
     name: 'ETB 2',
-    logo: 'https://graph.facebook.com/eitaborri/picture?width=200&height=200',
+    logo: '/logos/etb2.png',
     category: 'autonomicos',
     epgId: 'ETB2.TV',
     web: 'https://www.eitb.eus/es/television/etb2/directo/',
@@ -458,7 +458,7 @@ export const channels: Channel[] = [
   {
     id: 'canalsur',
     name: 'Canal Sur',
-    logo: 'https://graph.facebook.com/canaborodasur/picture?width=200&height=200',
+    logo: '/logos/canalsur.png',
     category: 'autonomicos',
     epgId: 'CanalSur.TV',
     web: 'https://www.canalsur.es/television',
@@ -469,7 +469,7 @@ export const channels: Channel[] = [
   {
     id: 'telemadrid',
     name: 'Telemadrid',
-    logo: 'https://graph.facebook.com/telemadrid/picture?width=200&height=200',
+    logo: '/logos/telemadrid.png',
     category: 'autonomicos',
     epgId: 'Telemadrid.TV',
     web: 'https://www.telemadrid.es/emision-en-directo/',
@@ -481,7 +481,7 @@ export const channels: Channel[] = [
   {
     id: 'apunt',
     name: 'À Punt',
-    logo: 'https://graph.facebook.com/apaborpunt/picture?width=200&height=200',
+    logo: '/logos/apunt.png',
     category: 'autonomicos',
     epgId: 'APunt.TV',
     web: 'https://www.apuntmedia.es/directe/',
@@ -493,7 +493,7 @@ export const channels: Channel[] = [
   {
     id: 'tvg',
     name: 'TVG',
-    logo: 'https://graph.facebook.com/CRTVG/picture?width=200&height=200',
+    logo: '/logos/tvg.png',
     category: 'autonomicos',
     epgId: 'TVG.TV',
     web: 'https://www.crtvg.es/tvg',
@@ -504,7 +504,7 @@ export const channels: Channel[] = [
   {
     id: 'tvg2',
     name: 'TVG 2',
-    logo: 'https://graph.facebook.com/CRTVG/picture?width=200&height=200',
+    logo: '/logos/tvg2.png',
     category: 'autonomicos',
     web: 'https://www.crtvg.es/tvg',
     sources: [
@@ -514,7 +514,7 @@ export const channels: Channel[] = [
   {
     id: 'ib3',
     name: 'IB3',
-    logo: 'https://graph.facebook.com/IB3tv/picture?width=200&height=200',
+    logo: '/logos/ib3.png',
     category: 'autonomicos',
     web: 'https://ib3.org/directe',
     sources: [
@@ -524,7 +524,7 @@ export const channels: Channel[] = [
   {
     id: 'canalextremadura',
     name: 'Canal Extremadura',
-    logo: 'https://graph.facebook.com/CanalExtremadura/picture?width=200&height=200',
+    logo: '/logos/canalextremadura.png',
     category: 'autonomicos',
     web: 'https://www.canalextremadura.es/',
     sources: [
@@ -534,7 +534,7 @@ export const channels: Channel[] = [
   {
     id: 'aragontv',
     name: 'Aragón TV',
-    logo: 'https://graph.facebook.com/aragontelevision/picture?width=200&height=200',
+    logo: '/logos/aragontv.png',
     category: 'autonomicos',
     web: 'https://www.cartv.es/aragontv/directo',
     sources: [
@@ -544,7 +544,7 @@ export const channels: Channel[] = [
   {
     id: 'tvcanaria',
     name: 'TV Canaria',
-    logo: 'https://graph.facebook.com/RTVCanarias/picture?width=200&height=200',
+    logo: '/logos/tvcanaria.png',
     category: 'autonomicos',
     web: 'https://cdn.rtvc.es/en-directo/',
     sources: [
@@ -554,7 +554,7 @@ export const channels: Channel[] = [
   {
     id: 'cmm',
     name: 'CMM',
-    logo: 'https://graph.facebook.com/CMMMediaES/picture?width=200&height=200',
+    logo: '/logos/cmm.png',
     category: 'autonomicos',
     web: 'https://www.cmmedia.es/',
     sources: [
@@ -564,7 +564,7 @@ export const channels: Channel[] = [
   {
     id: 'sx3',
     name: 'SX3',
-    logo: 'https://graph.facebook.com/SomSX3/picture?width=200&height=200',
+    logo: '/logos/sx3.jpg',
     category: 'autonomicos',
     web: 'https://www.3cat.cat/3cat/directes/sx3/',
     sources: [

@@ -1,118 +1,107 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import type { Channel, Category } from './data/types'
+import { CATEGORY_LABELS, CATEGORY_ORDER } from './data/types'
 import { channels } from './data/channels'
 import { useFavorites } from './hooks/useFavorites'
 import { CategoryTabs } from './components/CategoryTabs'
 import { ChannelGrid } from './components/ChannelGrid'
 import { SearchBar } from './components/SearchBar'
 import { VideoPlayer } from './components/VideoPlayer'
+import { Navigation } from './components/Navigation'
+import { Icon } from './components/Icon'
 
 type Filter = Category | 'favoritos' | 'todos'
 
 export default function App() {
   const [activeFilter, setActiveFilter] = useState<Filter>('todos')
   const [search, setSearch] = useState('')
+  const [searchMode, setSearchMode] = useState(false)
+  const [sidebarVisible, setSidebarVisible] = useState(true)
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null)
+  const playerOpener = useRef<HTMLButtonElement | null>(null)
+  const play = (channel: Channel, trigger: HTMLButtonElement) => {
+    playerOpener.current = trigger
+    setActiveChannel(channel)
+  }
   const { favorites, toggle, isFavorite } = useFavorites()
 
-  const filteredChannels = useMemo(() => {
-    let list = channels
+  const filteredChannels = useMemo(() => channels.filter(channel => {
+    const matchesFilter = activeFilter === 'todos'
+      || (activeFilter === 'favoritos' ? favorites.has(channel.id) : channel.category === activeFilter)
+    return matchesFilter && channel.name.toLocaleLowerCase('es').includes(search.toLocaleLowerCase('es').trim())
+  }), [activeFilter, search, favorites])
 
-    if (activeFilter === 'favoritos') {
-      list = list.filter(c => favorites.has(c.id))
-    } else if (activeFilter !== 'todos') {
-      list = list.filter(c => c.category === activeFilter)
-    }
+  const selectFilter = (filter: Filter) => {
+    setActiveFilter(filter)
+    setSearch('')
+    setSearchMode(false)
+    window.scrollTo({ top: 0 })
+  }
 
-    if (search.trim()) {
-      const q = search.toLowerCase().trim()
-      list = list.filter(c => c.name.toLowerCase().includes(q))
-    }
+  const openSearch = () => {
+    setActiveFilter('todos')
+    setSearchMode(true)
+    window.scrollTo({ top: 0 })
+  }
 
-    return list
-  }, [activeFilter, search, favorites])
-
-  const handlePlay = useCallback((channel: Channel) => {
-    setActiveChannel(channel)
-  }, [])
-
-  const handleClose = useCallback(() => {
-    setActiveChannel(null)
-  }, [])
-
-  const handleChannelChange = useCallback((channel: Channel) => {
-    setActiveChannel(channel)
-  }, [])
+  const title = searchMode ? 'Buscar' : activeFilter === 'todos' ? 'En directo'
+    : activeFilter === 'favoritos' ? 'Favoritos' : CATEGORY_LABELS[activeFilter]
+  const grouped = activeFilter === 'todos' && !search.trim() && !searchMode
 
   return (
-    <div className="min-h-screen flex flex-col relative">
-      {/* Ambient gradient orbs */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10" aria-hidden>
-        <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-indigo-600/[0.07] blur-[120px]" />
-        <div className="absolute top-1/3 -right-20 w-80 h-80 rounded-full bg-purple-600/[0.05] blur-[100px]" />
-        <div className="absolute -bottom-20 left-1/3 w-72 h-72 rounded-full bg-blue-600/[0.04] blur-[100px]" />
-      </div>
+    <div className={`app-shell ${sidebarVisible ? '' : 'sidebar-hidden'}`}>
+      <a className="skip-link" href="#channels">Ir a los canales</a>
+      <Navigation active={activeFilter} searchMode={searchMode} favoriteCount={favorites.size}
+        onSelect={selectFilter} onSearch={openSearch} />
 
-      {/* Header */}
-      <header className="sticky top-0 z-40 glass-static border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="flex items-center gap-3 flex-1">
-              <div className="w-9 h-9 rounded-xl bg-accent flex items-center justify-center shrink-0">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                  <rect x="2" y="3" width="20" height="14" rx="2" />
-                  <path d="M8 21h8M12 17v4" />
-                </svg>
-              </div>
-              <h1 className="text-xl font-bold text-white tracking-tight">
-                TV <span className="text-accent">Espana</span>
-              </h1>
-            </div>
-            <div className="w-64 hidden sm:block">
-              <SearchBar value={search} onChange={setSearch} />
-            </div>
-          </div>
-
-          {/* Mobile search */}
-          <div className="sm:hidden mb-3">
-            <SearchBar value={search} onChange={setSearch} />
-          </div>
-
-          <CategoryTabs
-            active={activeFilter}
-            onSelect={setActiveFilter}
-            hasFavorites={favorites.size > 0}
-          />
+      <main id="channels" className="main-content" tabIndex={-1}>
+        <div className="toolbar">
+          <button className="icon-button sidebar-toggle" onClick={() => setSidebarVisible(value => !value)}
+            aria-label={sidebarVisible ? 'Ocultar barra lateral' : 'Mostrar barra lateral'}
+            aria-expanded={sidebarVisible} aria-controls="app-navigation">
+            <Icon name="sidebar" />
+          </button>
+          <span className="mobile-brand"><Icon name="tv" /> TV España</span>
+          <div className="toolbar-search"><SearchBar value={search} onChange={setSearch} /></div>
         </div>
-      </header>
 
-      {/* Main content */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-6">
-        <ChannelGrid
-          channels={filteredChannels}
-          isFavorite={isFavorite}
-          onPlay={handlePlay}
-          onToggleFavorite={toggle}
-        />
+        <div className="page-content">
+          <header className="page-heading">
+            <h1>{title}</h1>
+            <p aria-live="polite" aria-atomic="true">{filteredChannels.length} {filteredChannels.length === 1 ? 'canal' : 'canales'}</p>
+          </header>
+
+          {(searchMode || search.length > 0) && <div className="mobile-search"><SearchBar value={search} onChange={setSearch} autoFocus={searchMode} /></div>}
+
+          {activeFilter !== 'favoritos' && !searchMode && <CategoryTabs active={activeFilter} onSelect={selectFilter} />}
+
+          {filteredChannels.length === 0 ? (
+            <div className="empty-state">
+              <Icon name={activeFilter === 'favoritos' && !search ? 'heart' : 'search'} />
+              <h2>{activeFilter === 'favoritos' && !search ? 'Tus canales, a mano' : 'No hay resultados'}</h2>
+              <p>{activeFilter === 'favoritos' && !search
+                ? 'Toca el corazón de un canal para guardarlo aquí.' : `Prueba con otro nombre${search ? ` distinto de «${search.trim()}»` : ''}.`}</p>
+              <button className="text-button" onClick={() => search ? setSearch('') : selectFilter('todos')}>
+                {search ? 'Borrar búsqueda' : 'Explorar canales'}
+              </button>
+            </div>
+          ) : grouped ? CATEGORY_ORDER.map(category => (
+            <section className="channel-section" key={category} aria-labelledby={`section-${category}`}>
+              <div className="section-heading">
+                <h2 id={`section-${category}`}>{CATEGORY_LABELS[category]}</h2>
+                <button className="text-button" onClick={() => selectFilter(category)} aria-label={`Ver todos los canales de ${CATEGORY_LABELS[category]}`}>
+                  Ver todos <Icon name="chevron" />
+                </button>
+              </div>
+              <ChannelGrid channels={filteredChannels.filter(channel => channel.category === category)}
+                isFavorite={isFavorite} onPlay={play} onToggleFavorite={toggle} />
+            </section>
+          )) : <ChannelGrid channels={filteredChannels} isFavorite={isFavorite}
+            onPlay={play} onToggleFavorite={toggle} />}
+        </div>
       </main>
 
-      {/* Footer */}
-      <footer className="py-4 text-center text-xs text-text-muted border-t border-white/5">
-        Todos los canales son publicos y gratuitos. Fuentes oficiales via{' '}
-        <a href="https://github.com/LaQuay/TDTChannels" target="_blank" rel="noopener noreferrer"
-          className="text-accent/70 hover:text-accent transition-colors">
-          TDTChannels
-        </a>
-      </footer>
-
-      {/* Video Player Overlay */}
-      {activeChannel && (
-        <VideoPlayer
-          channel={activeChannel}
-          onClose={handleClose}
-          onChannelChange={handleChannelChange}
-        />
-      )}
+      {activeChannel && <VideoPlayer returnFocusRef={playerOpener} channel={activeChannel} onClose={() => setActiveChannel(null)} onChannelChange={setActiveChannel} />}
     </div>
   )
 }

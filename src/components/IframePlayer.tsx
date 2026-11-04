@@ -10,11 +10,11 @@ export function IframePlayer({ url, title, onError }: Props) {
   const [isLoading, setIsLoading] = useState(true)
 
   return (
-    <div className="relative w-full h-full bg-black">
+    <div className="video-surface" aria-busy={isLoading}>
       <iframe
         src={url}
         title={title}
-        className="w-full h-full border-0"
+        className="embedded-player"
         allowFullScreen
         allow="autoplay; encrypted-media; picture-in-picture"
         referrerPolicy="no-referrer"
@@ -23,8 +23,8 @@ export function IframePlayer({ url, title, onError }: Props) {
         onError={() => { setIsLoading(false); onError() }}
       />
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black">
-          <div className="w-10 h-10 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+        <div className="player-loading" role="status" aria-label="Cargando canal">
+          <span className="spinner" />
         </div>
       )}
     </div>

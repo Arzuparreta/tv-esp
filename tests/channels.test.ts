@@ -1,9 +1,17 @@
+import { existsSync } from 'node:fs'
 import { describe, it, expect } from 'vitest'
 import { channels } from '../src/data/channels'
 import { CATEGORY_ORDER } from '../src/data/types'
-import type { Channel, SourceType } from '../src/data/types'
+import type { SourceType } from '../src/data/types'
 
 describe('Channel registry', () => {
+  it('serves every channel logo locally', () => {
+    for (const channel of channels) {
+      expect(channel.logo).toMatch(/^\/logos\//)
+      expect(existsSync(new URL('../public' + channel.logo, import.meta.url))).toBe(true)
+    }
+  })
+
   it('has at least 30 channels', () => {
     expect(channels.length).toBeGreaterThanOrEqual(30)
   })
