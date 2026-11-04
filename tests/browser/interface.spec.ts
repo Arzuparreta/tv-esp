@@ -46,7 +46,7 @@ test('player traps focus, changes channels, and restores focus and scroll on clo
   await opener.click()
   const dialog = page.getByRole('dialog')
   await expect(dialog).toBeVisible()
-  await expect(dialog.getByRole('link', { name: 'Abrir directo' })).toHaveAttribute('href', 'https://www.mitele.es/directo/cuatro')
+  await expect(dialog.getByRole('link', { name: 'Abrir directo' })).toHaveAttribute('href', 'https://www.mediasetinfinity.es/directo/cuatro/')
   await expect(dialog.getByRole('link', { name: 'Abrir directo' })).toHaveAttribute('rel', 'noopener noreferrer')
   await expect(page.locator('body')).toHaveCSS('overflow', 'hidden')
   for (let i = 0; i < 6; i++) {
@@ -123,7 +123,10 @@ test('fullscreen uses the player surface and can return to its sheet', async ({ 
 })
 
 test('HLS exposes native playback controls and closing releases the player', async ({ page }) => {
-  await page.route('**:3555/**', () => { /* Keep loading deterministic while checking the player UI. */ })
+  await page.route('**:3555/**', route => {
+    if (new URL(route.request().url()).pathname === '/sources') return route.fulfill({ json: { sources: [] } })
+    // Keep HLS loading deterministic while checking the player UI.
+  })
   await page.goto('/')
   await page.getByRole('button', { name: 'Ver La 1 en directo', exact: true }).click()
   await expect(page.locator('video')).toHaveAttribute('controls', '')

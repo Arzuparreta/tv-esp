@@ -13,7 +13,8 @@
     "lint": "eslint .",
     "preview": "vite preview --host 0.0.0.0",
     "test:ui": "playwright test",
-    "test:unit": "vitest run tests/channels.test.ts tests/player.test.ts"
+    "test:unit": "vitest run tests/channels.test.ts tests/player.test.ts tests/server.test.ts tests/watchdog.test.ts",
+    "test:live": "TV_ESP_LIVE_TESTS=1 vitest run tests/proxy-integration.test.ts"
   },
   "dependencies": {
     "express": "^5.2.1",

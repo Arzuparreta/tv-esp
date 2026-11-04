@@ -4,6 +4,7 @@ import type { Channel, Source, SourceType } from '../data/types'
 const TYPE_PRIORITY: Record<SourceType, number> = {
   atres: 0,
   hls: 1,
+  video: 1,
   iframe: 2,
   youtube: 3,
   web: 4,
@@ -11,16 +12,26 @@ const TYPE_PRIORITY: Record<SourceType, number> = {
 
 export function getSortedSources(channel: Channel): Source[] {
   return [...channel.sources].sort(
-    (a, b) => TYPE_PRIORITY[a.type] - TYPE_PRIORITY[b.type]
+    (a, b) => (a.priority ?? TYPE_PRIORITY[a.type]) - (b.priority ?? TYPE_PRIORITY[b.type])
   )
 }
 
 export function getNextSource(
   channel: Channel,
-  failedUrls: Set<string>
+  failedSources: Set<string>
 ): Source | null {
   const sorted = getSortedSources(channel)
-  return sorted.find(s => !failedUrls.has(s.url)) ?? null
+  return sorted.find(s => !failedSources.has(sourceKey(s))) ?? null
+}
+
+export const sourceKey = (source: Source): string => `${source.type}:${source.url}`
+
+/** Resolved feeds first, then bundled sources, with the official site last. */
+export function mergeSources(channel: Channel, resolved: Source[] = []): Source[] {
+  const sources = [...resolved, ...channel.sources.filter(source => source.type !== 'atres')]
+  if (channel.web) sources.push({ type: 'web', url: channel.web, label: 'Web oficial' })
+  const seen = new Set<string>()
+  return sources.filter(source => !seen.has(sourceKey(source)) && !!seen.add(sourceKey(source)))
 }
 
 export function extractYouTubeId(url: string): string | null {

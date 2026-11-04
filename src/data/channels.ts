@@ -12,7 +12,6 @@ export const channels: Channel[] = [
     sources: [
       { type: 'hls', url: 'https://rtvelivestream.rtve.es/rtvesec/la1/la1_main_dvr.m3u8' },
       { type: 'hls', url: 'https://dghxc56urunop.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-zabn6k211oedh/La1ES.m3u8' },
-      { type: 'iframe', url: 'https://www.rtve.es/play/videos/directo/la-1/' },
     ],
   },
   {
@@ -25,7 +24,6 @@ export const channels: Channel[] = [
     sources: [
       { type: 'hls', url: 'https://rtvelivestream.rtve.es/rtvesec/la2/la2_main_dvr.m3u8' },
       { type: 'hls', url: 'https://d1yebix5w29z3v.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-haqfba85d1gvv/La2ES.m3u8' },
-      { type: 'iframe', url: 'https://www.rtve.es/play/videos/directo/la-2/' },
     ],
   },
   {
@@ -37,6 +35,7 @@ export const channels: Channel[] = [
     web: 'https://www.atresplayer.com/directos/antena3/',
     sources: [
       { type: 'atres', url: 'antena3' },
+      { type: 'iframe', url: 'https://www.atresplayer.com/embed/live/antena3/', label: 'Atresplayer · reproductor oficial' },
       { type: 'web', url: 'https://www.atresplayer.com/directos/antena3/' },
     ],
   },
@@ -49,6 +48,7 @@ export const channels: Channel[] = [
     web: 'https://www.atresplayer.com/directos/lasexta/',
     sources: [
       { type: 'atres', url: 'lasexta' },
+      { type: 'iframe', url: 'https://www.atresplayer.com/embed/live/lasexta/', label: 'Atresplayer · reproductor oficial' },
       { type: 'web', url: 'https://www.atresplayer.com/directos/lasexta/' },
     ],
   },
@@ -58,9 +58,9 @@ export const channels: Channel[] = [
     logo: '/logos/cuatro.png',
     category: 'principales',
     epgId: 'Cuatro.TV',
-    web: 'https://www.mitele.es/directo/cuatro',
+    web: 'https://www.mediasetinfinity.es/directo/cuatro/',
     sources: [
-      { type: 'web', url: 'https://www.mitele.es/directo/cuatro' },
+      { type: 'web', url: 'https://www.mediasetinfinity.es/directo/cuatro/' },
     ],
   },
   {
@@ -69,9 +69,9 @@ export const channels: Channel[] = [
     logo: '/logos/telecinco.png',
     category: 'principales',
     epgId: 'Telecinco.TV',
-    web: 'https://www.mitele.es/directo/telecinco',
+    web: 'https://www.mediasetinfinity.es/directo/telecinco/',
     sources: [
-      { type: 'web', url: 'https://www.mitele.es/directo/telecinco' },
+      { type: 'web', url: 'https://www.mediasetinfinity.es/directo/telecinco/' },
     ],
   },
 
@@ -132,7 +132,7 @@ export const channels: Channel[] = [
     epgId: 'ElConfidencial.TV',
     web: 'https://www.elconfidencial.com/television/',
     sources: [
-      { type: 'hls', url: 'https://dgrfwaj8stp69.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-hmbd9k13g6zsa/live/fast-channel-elconfidencial/fast-channel-elconfidencial.m3u8' },
+      { type: 'hls', url: 'https://sis-global.prod.samsungtv.plus/v1/tvpprd/sc-bmo0niz694whx.m3u8' },
     ],
   },
   {
@@ -199,7 +199,7 @@ export const channels: Channel[] = [
     name: 'ETB Deportes',
     logo: '/logos/etbdeportes.jpg',
     category: 'deportes',
-    web: 'https://www.eitb.eus/es/deportes/deporte-en-directo/',
+    web: 'https://kirolakeitb.eus/es/kirolak-360/en-directo/',
     sources: [
       { type: 'hls', url: 'https://multimedia.eitb.eus/live-content/oka1hd-hls/master.m3u8' },
       { type: 'hls', url: 'https://multimedia.eitb.eus/live-content/oka2hd-hls/master.m3u8' },
@@ -216,6 +216,7 @@ export const channels: Channel[] = [
     web: 'https://www.atresplayer.com/directos/neox/',
     sources: [
       { type: 'atres', url: 'neox' },
+      { type: 'iframe', url: 'https://www.atresplayer.com/embed/live/neox/', label: 'Atresplayer · reproductor oficial' },
       { type: 'web', url: 'https://www.atresplayer.com/directos/neox/' },
     ],
   },
@@ -228,6 +229,7 @@ export const channels: Channel[] = [
     web: 'https://www.atresplayer.com/directos/nova/',
     sources: [
       { type: 'atres', url: 'nova' },
+      { type: 'iframe', url: 'https://www.atresplayer.com/embed/live/nova/', label: 'Atresplayer · reproductor oficial' },
       { type: 'web', url: 'https://www.atresplayer.com/directos/nova/' },
     ],
   },
@@ -240,6 +242,7 @@ export const channels: Channel[] = [
     web: 'https://www.atresplayer.com/directos/mega/',
     sources: [
       { type: 'atres', url: 'mega' },
+      { type: 'iframe', url: 'https://www.atresplayer.com/embed/live/mega/', label: 'Atresplayer · reproductor oficial' },
       { type: 'web', url: 'https://www.atresplayer.com/directos/mega/' },
     ],
   },
@@ -252,6 +255,7 @@ export const channels: Channel[] = [
     web: 'https://www.atresplayer.com/directos/atreseries/',
     sources: [
       { type: 'atres', url: 'atreseries' },
+      { type: 'iframe', url: 'https://www.atresplayer.com/embed/live/atreseries/', label: 'Atresplayer · reproductor oficial' },
       { type: 'web', url: 'https://www.atresplayer.com/directos/atreseries/' },
     ],
   },
@@ -261,9 +265,9 @@ export const channels: Channel[] = [
     logo: '/logos/fdf.png',
     category: 'tematicos',
     epgId: 'FDF.TV',
-    web: 'https://www.mitele.es/directo/fdf',
+    web: 'https://www.mediasetinfinity.es/directo/fdf/',
     sources: [
-      { type: 'web', url: 'https://www.mitele.es/directo/fdf' },
+      { type: 'web', url: 'https://www.mediasetinfinity.es/directo/fdf/' },
     ],
   },
   {
@@ -272,9 +276,9 @@ export const channels: Channel[] = [
     logo: '/logos/energy.png',
     category: 'tematicos',
     epgId: 'Energy.TV',
-    web: 'https://www.mitele.es/directo/energy',
+    web: 'https://www.mediasetinfinity.es/directo/energy/',
     sources: [
-      { type: 'web', url: 'https://www.mitele.es/directo/energy' },
+      { type: 'web', url: 'https://www.mediasetinfinity.es/directo/energy/' },
     ],
   },
   {
@@ -283,9 +287,9 @@ export const channels: Channel[] = [
     logo: '/logos/divinity.png',
     category: 'tematicos',
     epgId: 'Divinity.TV',
-    web: 'https://www.mitele.es/directo/divinity',
+    web: 'https://www.mediasetinfinity.es/directo/divinity/',
     sources: [
-      { type: 'web', url: 'https://www.mitele.es/directo/divinity' },
+      { type: 'web', url: 'https://www.mediasetinfinity.es/directo/divinity/' },
     ],
   },
   {
@@ -294,9 +298,9 @@ export const channels: Channel[] = [
     logo: '/logos/bemad.png',
     category: 'tematicos',
     epgId: 'Bemad.TV',
-    web: 'https://www.mitele.es/directo/bemad',
+    web: 'https://www.mediasetinfinity.es/directo/bemad/',
     sources: [
-      { type: 'web', url: 'https://www.mitele.es/directo/bemad' },
+      { type: 'web', url: 'https://www.mediasetinfinity.es/directo/bemad/' },
     ],
   },
   {
@@ -394,9 +398,9 @@ export const channels: Channel[] = [
     logo: '/logos/boing.png',
     category: 'infantiles',
     epgId: 'Boing.TV',
-    web: 'https://www.mitele.es/directo/boing',
+    web: 'https://www.mediasetinfinity.es/directo/boing/',
     sources: [
-      { type: 'web', url: 'https://www.mitele.es/directo/boing' },
+      { type: 'web', url: 'https://www.mediasetinfinity.es/directo/boing/' },
     ],
   },
   {
@@ -429,8 +433,8 @@ export const channels: Channel[] = [
     epgId: 'TV3.TV',
     web: 'https://www.3cat.cat/3cat/directes/tv3/',
     sources: [
-      { type: 'hls', url: 'https://directes-tv-int.3catdirectes.cat/live-content/tvi-hls/master.m3u8' },
-      { type: 'hls', url: 'https://directes-tv-es.3catdirectes.cat/live-content/tvi-hls/master.m3u8' },
+      { type: 'hls', url: 'https://directes3-tv-int.3catdirectes.cat/live-content/tvi-hls/master.m3u8', label: 'TV3 · internacional' },
+      { type: 'hls', url: 'https://directes-tv-es.3catdirectes.cat/live-content/tvc-hls/master.m3u8', label: 'TV3 CAT · España' },
     ],
   },
   {
@@ -472,10 +476,10 @@ export const channels: Channel[] = [
     logo: '/logos/telemadrid.png',
     category: 'autonomicos',
     epgId: 'Telemadrid.TV',
-    web: 'https://www.telemadrid.es/emision-en-directo/',
+    web: 'https://www.tlmad.es/pages/live/telemadrid',
     sources: [
       { type: 'hls', url: 'https://telemadrid-23-secure2.akamaized.net/master.m3u8' },
-      { type: 'web', url: 'https://www.telemadrid.es/emision-en-directo/' },
+      { type: 'web', url: 'https://www.tlmad.es/pages/live/telemadrid' },
     ],
   },
   {
@@ -486,7 +490,7 @@ export const channels: Channel[] = [
     epgId: 'APunt.TV',
     web: 'https://www.apuntmedia.es/directe/',
     sources: [
-      { type: 'hls', url: 'https://bcovlive-a.akamaihd.net/8499d938ef904e39b58a4adec2ddeada/eu-west-1/6057955885001/playlist_dvr.m3u8' },
+      { type: 'hls', url: 'https://fastly.live.brightcove.com/1846756479408303045/eu-central-1/6057955885001/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0IjoiZWFxNWh4LmVncmVzcy53YzQ3bTEiLCJhY2NvdW50X2lkIjoiNjA1Nzk1NTg4NTAwMSIsImVobiI6ImZhc3RseS5saXZlLmJyaWdodGNvdmUuY29tIiwiaXNzIjoiYmxpdmUtcGxheWJhY2stc291cmNlLWFwaSIsInN1YiI6InBhdGhtYXB0b2tlbiIsImF1ZCI6WyI2MDU3OTU1ODg1MDAxIl0sImp0aSI6IjE4NDY3NTY0Nzk0MDgzMDMwNDUifQ.o6wb_VA-TVxl3ERgr7FKLlaTjY7smErmsf73QAydySE/playlist-hls-dvr.m3u8' },
       { type: 'web', url: 'https://www.apuntmedia.es/directe/' },
     ],
   },
@@ -518,6 +522,7 @@ export const channels: Channel[] = [
     category: 'autonomicos',
     web: 'https://ib3.org/directe',
     sources: [
+      { type: 'youtube', url: 'https://www.youtube.com/channel/UCff_CBVJDTHP4wOHPjP5BMg/live', label: 'IB3 Global' },
       { type: 'web', url: 'https://ib3.org/directe' },
     ],
   },
@@ -528,7 +533,7 @@ export const channels: Channel[] = [
     category: 'autonomicos',
     web: 'https://www.canalextremadura.es/',
     sources: [
-      { type: 'hls', url: 'https://canalextremadura-live.flumotion.cloud/canalextremadura/live_all/playlist.m3u8' },
+      { type: 'hls', url: 'https://d2ymuyhevki1a1.cloudfront.net/wct-ddd2992e-86fc-4611-a491-7f392259e9ba/continuous/9be76611-d2cd-474d-bf19-ef702ba31b02/index.m3u8' },
     ],
   },
   {
@@ -536,7 +541,7 @@ export const channels: Channel[] = [
     name: 'Aragón TV',
     logo: '/logos/aragontv.png',
     category: 'autonomicos',
-    web: 'https://www.cartv.es/aragontv/directo',
+    web: 'https://www.aragonplay.es/watch/live/69934178aea15ae34fa39ad0',
     sources: [
       { type: 'hls', url: 'https://cartv.streaming.aranova.es/hls/live/aragontv_canal1.m3u8' },
     ],

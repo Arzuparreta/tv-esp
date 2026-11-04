@@ -2,8 +2,9 @@ import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react'
 import type { RefObject } from 'react'
 import type { Channel } from '../data/types'
 import { channels as allChannels } from '../data/channels'
-import { getNextSource } from '../lib/player'
+import { getNextSource, sourceKey } from '../lib/player'
 import { useKeyboard } from '../hooks/useKeyboard'
+import { useChannelSources } from '../hooks/useChannelSources'
 import { IframePlayer } from './IframePlayer'
 import { YouTubePlayer } from './YouTubePlayer'
 import { WebPlayer } from './WebPlayer'
@@ -21,25 +22,37 @@ interface Props {
 }
 
 function ChannelPlayback({ channel }: { channel: Channel }) {
-  const [failedUrls, setFailedUrls] = useState<Set<string>>(new Set())
-  const currentSource = getNextSource(channel, failedUrls)
-  const handleSourceError = useCallback(() => {
-    if (currentSource) setFailedUrls(previous => new Set(previous).add(currentSource.url))
-  }, [currentSource])
+  const [attempt, setAttempt] = useState(0)
+  return <ResolvedPlayback key={attempt} channel={channel} onRetry={() => setAttempt(value => value + 1)} />
+}
+
+function ResolvedPlayback({ channel, onRetry }: { channel: Channel; onRetry: () => void }) {
+  const { sources, unavailable } = useChannelSources(channel)
+  const [failedSources, setFailedSources] = useState<Set<string>>(new Set())
+  const playbackChannel = { ...channel, sources: sources ?? [] }
+  const currentSource = getNextSource(playbackChannel, failedSources)
+  const currentKey = currentSource ? sourceKey(currentSource) : null
+  const handleSourceError = () => {
+    if (currentKey) setFailedSources(previous => new Set(previous).add(currentKey))
+  }
+
+  if (!sources) return <div className="player-loading" role="status" aria-label="Buscando fuentes del canal"><span className="spinner" /></div>
 
   if (!currentSource) return <div className="playback-message" role="status">
     <Icon name="tv" />
     <h2>No se puede reproducir {channel.name}</h2>
     <p>Prueba de nuevo o abre el directo en su web oficial.</p>
     <div className="message-actions">
-      <button className="primary-button" onClick={() => setFailedUrls(new Set())}>Reintentar</button>
+      <button className="primary-button" onClick={onRetry}>Reintentar</button>
       {channel.web && <a className="secondary-button" href={channel.web} target="_blank" rel="noopener noreferrer">Abrir web oficial <Icon name="external" /></a>}
     </div>
   </div>
 
-  switch (currentSource.type) {
+  const renderSource = () => {
+    switch (currentSource.type) {
     case 'atres':
     case 'hls':
+    case 'video':
       return <Suspense fallback={<div className="player-loading" role="status" aria-label="Cargando canal"><span className="spinner" /></div>}>
         <HlsPlayer key={currentSource.url} url={currentSource.url} sourceType={currentSource.type} onError={handleSourceError} />
       </Suspense>
@@ -48,8 +61,19 @@ function ChannelPlayback({ channel }: { channel: Channel }) {
     case 'youtube':
       return <YouTubePlayer key={currentSource.url} url={currentSource.url} title={channel.name} onError={handleSourceError} />
     case 'web':
-      return <WebPlayer url={currentSource.url} channelName={channel.name} channelLogo={channel.logo} />
+      return <WebPlayer url={currentSource.url} channelName={channel.name} channelLogo={channel.logo} onRetry={onRetry}
+        failed={failedSources.size > 0 || unavailable} />
+    }
   }
+  const next = getNextSource(playbackChannel, new Set(failedSources).add(sourceKey(currentSource)))
+  return <div className="channel-playback">
+    <div className="source-player">{renderSource()}</div>
+    {currentSource.type !== 'web' && <div className="source-actions" aria-label="Opciones de reproducción">
+      <span>{currentSource.label || 'En directo'}</span>
+      {next && <button onClick={handleSourceError}>Probar otra fuente</button>}
+      {channel.web && <a href={channel.web} target="_blank" rel="noopener noreferrer">Web oficial <Icon name="external" /></a>}
+    </div>}
+  </div>
 }
 
 export function VideoPlayer({ channel, returnFocusRef, onClose, onChannelChange }: Props) {
